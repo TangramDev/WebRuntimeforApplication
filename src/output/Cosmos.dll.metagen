@@ -1,0 +1,239 @@
+ImageRuntimeVersion: v4.0.30319
+Assembly Cosmos, Version=1.0.1992.1963, Culture=neutral, PublicKeyToken=1bcc94f26a4807a7: 
+	hash=SHA1, flags=PublicKey
+Assembly mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly PresentationCore, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35: 
+	hash=None, flags=None
+Assembly PresentationFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35: 
+	hash=None, flags=None
+Assembly System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a: 
+	hash=None, flags=None
+Assembly System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Xaml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly WindowsBase, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35: 
+	hash=None, flags=None
+Assembly WindowsFormsIntegration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35: 
+	hash=None, flags=None
+Class Cosmos.Grid: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(IGrid*): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Interfaces:
+    System.IDisposable
+  Fields:
+    IGrid* m_pGrid : Public
+    System.Object m_pHostObj : Public
+    CCosmosGridEvent* m_pGridEvent : Public
+    CGridCLREvent* m_pGridCLREvent : Public
+  Properties:
+    System.String Attribute [System.String] 'get set' : 
+    Int64 Handle 'get ' : 
+    GridType GridType 'get ' : 
+    Int32 Cols 'get ' : 
+    Int32 Rows 'get ' : 
+    Int32 Vmax 'get set' : 
+    Int32 Vmin 'get set' : 
+    Int32 Hmax 'get set' : 
+    Int32 Hmin 'get set' : 
+    Int32 Row  'get ' : 
+    Int32 Col  'get ' : 
+    Cosmos.Grid HostGrid 'get ' : 
+    Cosmos.Grid ParentGrid 'get ' : 
+    Cosmos.Grid RootGrid 'get ' : 
+    Cosmos.Galaxy HostGalaxy 'get ' : 
+    Cosmos.Galaxy Galaxy 'get ' : 
+    Int32 ActivePage 'get set' : 
+    System.Object Tag 'get set' : 
+    System.Object Extender 'get set' : 
+    System.Drawing.Color rgbRightBottom 'get set' : 
+    System.Drawing.Color rgbLeftTop 'get set' : 
+    System.Drawing.Color rgbMiddle 'get set' : 
+    System.Object XObject 'get ' : 
+    System.String URL 'get set' : 
+    System.String Name 'get set' : 
+    System.String Caption 'get set' : 
+  Events:
+    TabChange OnTabChange: SpecialName
+    Destroy OnDestroy: SpecialName
+    ObserveComplete OnObserveComplete: SpecialName
+    RootGridCreated OnRootGridCreated: SpecialName
+  Methods:
+    add_OnRootGridCreated(RootGridCreated): PrivateScope, Public, HideBySig, SpecialName
+    remove_OnRootGridCreated(RootGridCreated): PrivateScope, Public, HideBySig, SpecialName
+    Fire_RootGridCreated(IntPtr, String, Grid): PrivateScope, Public, HideBySig
+    add_OnObserveComplete(ObserveComplete): PrivateScope, Public, HideBySig, SpecialName
+    remove_OnObserveComplete(ObserveComplete): PrivateScope, Public, HideBySig, SpecialName
+    Fire_ObserveComplete(Grid): PrivateScope, Public, HideBySig
+    add_OnDestroy(Destroy): PrivateScope, Public, HideBySig, SpecialName
+    remove_OnDestroy(Destroy): PrivateScope, Public, HideBySig, SpecialName
+    Fire_OnDestroy(Grid): PrivateScope, Public, HideBySig
+    add_OnTabChange(TabChange): PrivateScope, Public, HideBySig, SpecialName
+    remove_OnTabChange(TabChange): PrivateScope, Public, HideBySig, SpecialName
+    Fire_OnTabChange(Grid, Grid): PrivateScope, Public, HideBySig
+    Observe(String, String): PrivateScope, Public, HideBySig
+    ObserveChild(Int32, Int32, String, String): PrivateScope, Public, HideBySig
+    get_Caption(): PrivateScope, Public, HideBySig, SpecialName
+    set_Caption(String): PrivateScope, Public, HideBySig, SpecialName
+    get_Name(): PrivateScope, Public, HideBySig, SpecialName
+    set_Name(String): PrivateScope, Public, HideBySig, SpecialName
+    get_URL(): PrivateScope, Public, HideBySig, SpecialName
+    set_URL(String): PrivateScope, Public, HideBySig, SpecialName
+    get_XObject(): PrivateScope, Public, HideBySig, SpecialName
+    get_rgbMiddle(): PrivateScope, Public, HideBySig, SpecialName
+    set_rgbMiddle(Color): PrivateScope, Public, HideBySig, SpecialName
+    get_rgbLeftTop(): PrivateScope, Public, HideBySig, SpecialName
+    set_rgbLeftTop(Color): PrivateScope, Public, HideBySig, SpecialName
+    get_rgbRightBottom(): PrivateScope, Public, HideBySig, SpecialName
+    set_rgbRightBottom(Color): PrivateScope, Public, HideBySig, SpecialName
+    get_Extender(): PrivateScope, Public, HideBySig, SpecialName
+    set_Extender(Object): PrivateScope, Public, HideBySig, SpecialName
+    get_Tag(): PrivateScope, Public, HideBySig, SpecialName
+    set_Tag(Object): PrivateScope, Public, HideBySig, SpecialName
+    get_ActivePage(): PrivateScope, Public, HideBySig, SpecialName
+    set_ActivePage(Int32): PrivateScope, Public, HideBySig, SpecialName
+    get_Galaxy(): PrivateScope, Public, HideBySig, SpecialName
+    get_HostGalaxy(): PrivateScope, Public, HideBySig, SpecialName
+    get_RootGrid(): PrivateScope, Public, HideBySig, SpecialName
+    get_ParentGrid(): PrivateScope, Public, HideBySig, SpecialName
+    get_HostGrid(): PrivateScope, Public, HideBySig, SpecialName
+    get_Col(): PrivateScope, Public, HideBySig, SpecialName
+    get_Row(): PrivateScope, Public, HideBySig, SpecialName
+    get_Hmin(): PrivateScope, Public, HideBySig, SpecialName
+    set_Hmin(Int32): PrivateScope, Public, HideBySig, SpecialName
+    get_Hmax(): PrivateScope, Public, HideBySig, SpecialName
+    set_Hmax(Int32): PrivateScope, Public, HideBySig, SpecialName
+    get_Vmin(): PrivateScope, Public, HideBySig, SpecialName
+    set_Vmin(Int32): PrivateScope, Public, HideBySig, SpecialName
+    get_Vmax(): PrivateScope, Public, HideBySig, SpecialName
+    set_Vmax(Int32): PrivateScope, Public, HideBySig, SpecialName
+    get_Rows(): PrivateScope, Public, HideBySig, SpecialName
+    get_Cols(): PrivateScope, Public, HideBySig, SpecialName
+    get_GridType(): PrivateScope, Public, HideBySig, SpecialName
+    get_Handle(): PrivateScope, Public, HideBySig, SpecialName
+    get_Attribute(String): PrivateScope, Public, HideBySig, SpecialName
+    set_Attribute(String, String): PrivateScope, Public, HideBySig, SpecialName
+    GetGrid(Int32, Int32): PrivateScope, Public, HideBySig
+    Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
+Class Cosmos.Grid+RootGridCreated: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(IntPtr, String, Grid): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(IntPtr, String, Grid, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Cosmos.Grid+ObserveComplete: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(Grid): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(Grid, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Cosmos.Grid+Destroy: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(Grid): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(Grid, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Cosmos.Grid+TabChange: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(Grid, Grid): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(Grid, Grid, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Cosmos.Galaxy: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.Collections.Generic.Dictionary`2[System.String,Cosmos.Grid]
+    Void .ctor(IGalaxy*): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Interfaces:
+    System.IDisposable
+  Properties:
+    Cosmos.Grid VisibleGrid 'get ' : 
+    IntPtr Handle 'get ' : 
+  Methods:
+    Observe(String, String): PrivateScope, Public, HideBySig
+    get_Handle(): PrivateScope, Public, HideBySig, SpecialName
+    get_VisibleGrid(): PrivateScope, Public, HideBySig, SpecialName
+    Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
+Class Cosmos.Hubble: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(IHubble*): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Interfaces:
+    System.IDisposable
+  Fields:
+    System.Drawing.Icon m_pDefaultIcon : Public, Static
+    TangramAppInit pOnAppInit : Public, Static
+  Properties:
+    Cosmos.Grid CreatingGrid 'get ' : 
+  Events:
+    FormNodeCreated OnFormNodeCreated: SpecialName
+    OpenComplete OnObserverComplete: SpecialName
+    TangramAppInit OnAppInit: SpecialName
+    Close OnClose: SpecialName
+  Methods:
+    HubbleInit(String): PrivateScope, Public, Static, HideBySig
+    CreateObject(String): PrivateScope, Public, Static, HideBySig
+    CreateForm(IWin32Window, String): PrivateScope, Public, Static, HideBySig
+    GetGridFromHandle(IntPtr): PrivateScope, Public, Static, HideBySig
+    GetGridFromControl(Control): PrivateScope, Public, Static, HideBySig
+    Observe(Control, String, String): PrivateScope, Public, Static, HideBySig
+    GetHubble(): PrivateScope, Public, Static, HideBySig
+    get_CreatingGrid(): PrivateScope, Public, Static, HideBySig, SpecialName
+    add_OnClose(Close): PrivateScope, Public, Static, HideBySig, SpecialName
+    remove_OnClose(Close): PrivateScope, Public, Static, HideBySig, SpecialName
+    Fire_OnClose(): PrivateScope, Public, Static, HideBySig
+    add_OnAppInit(TangramAppInit): PrivateScope, Public, Static, HideBySig, SpecialName
+    remove_OnAppInit(TangramAppInit): PrivateScope, Public, Static, HideBySig, SpecialName
+    raise_OnAppInit(): PrivateScope, Public, Static, HideBySig, SpecialName
+    Fire_OnAppInit(): PrivateScope, Public, Static, HideBySig
+    add_OnObserverComplete(OpenComplete): PrivateScope, Public, Static, HideBySig, SpecialName
+    remove_OnObserverComplete(OpenComplete): PrivateScope, Public, Static, HideBySig, SpecialName
+    Fire_OnObserverComplete(IntPtr, String, Grid): PrivateScope, Public, Static, HideBySig
+    add_OnFormNodeCreated(FormNodeCreated): PrivateScope, Public, Static, HideBySig, SpecialName
+    remove_OnFormNodeCreated(FormNodeCreated): PrivateScope, Public, Static, HideBySig, SpecialName
+    Fire_OnFormNodeCreated(String, Form, Grid): PrivateScope, Public, Static, HideBySig
+    Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
+Class Cosmos.Hubble+Close: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Cosmos.Hubble+TangramAppInit: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Cosmos.Hubble+OpenComplete: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(IntPtr, String, Grid): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(IntPtr, String, Grid, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class Cosmos.Hubble+FormNodeCreated: AutoLayout, AnsiClass, Class, NestedPublic, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(String, Form, Grid): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(String, Form, Grid, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Struct Cosmos.CosmosAppType: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    Cosmos.CosmosAppType APPWIN32 = 500 : Public, Static, Literal, HasDefault
+    Cosmos.CosmosAppType APPBROWSER = 1000 : Public, Static, Literal, HasDefault
+    Cosmos.CosmosAppType APPECLIPSE = 2000 : Public, Static, Literal, HasDefault
+    Cosmos.CosmosAppType APPBROWSER_ECLIPSE = 3000 : Public, Static, Literal, HasDefault
+    Cosmos.CosmosAppType APPBROWSERAPP = 4000 : Public, Static, Literal, HasDefault
+    Cosmos.CosmosAppType APPOTHER = 0 : Public, Static, Literal, HasDefault

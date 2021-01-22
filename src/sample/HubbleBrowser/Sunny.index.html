@@ -1,0 +1,354 @@
+﻿<!-- This is "index.html". Normally, it is named "ProjectName.index.html". This webpage is the real entry point of the HTML-driven App. -->
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Your First Cloud Application</title>
+    <link rel="stylesheet" href="./assets/github-markdown.css">
+    <style type="text/css">
+        .markdown-body {
+            box-sizing: border-box;
+            min-width: 200px;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 45px;
+        }
+
+        @media (max-width: 767px) {
+            .markdown-body {
+                padding: 15px;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+    <script type="text/javascript">
+        cosmos.onWinFormCreated = function (e) {
+            e.xobj.addEventListener("SizeChanged", function (x) {
+                //alert(x.getStr("currentevent") + " " + "Form width:" + x.getLong("width") + "\nheight:" + x.getLong("height"));
+            });
+        };
+
+        cosmos.onXobjCreated = function (e) {
+            //alert(e.xobj.name);
+            switch (e.xobj.name) {
+                case "SigmaBrowser_ntpctrl":
+                    {
+                        e.grid.addEventListener("button1", "OnClick", function (e) {
+                            e.grid.Observe("key1", document.getElementById("mainwindow_1").outerHTML);
+                            if (e.grid.parent != null && e.grid.parent.xobj.getLong("gridtype") == 4) {
+                                e.grid.parent.Observe(0, 0, "key1", document.getElementById("mainwindow_2").outerHTML);
+                            }
+                        });
+                        e.grid.addEventListener("button2", "OnClick", function (e) {
+                            e.grid.Observe("key2", document.getElementById("mainwindow_2").outerHTML);
+                            if (e.grid.parent != null && e.grid.parent.xobj.getLong("gridtype") == 4) {
+                                e.grid.parent.Observe(0, 0, "key2", document.getElementById("mainwindow_1").outerHTML);
+                            }
+                        });
+                    }
+                    break;
+                case "navCtrl":
+                    {
+                        e.grid.addEventListener("treeView1", "OnAfterSelect", function (e) {
+                            var name = e.getStr("name");
+                            var list = document.getElementsByTagName(name);
+                            for (var i = 0; i < list.length; i++) {
+                                var target = list[i].getAttribute("target");
+                                if (target != null) {
+                                    cosmos.sendMessage(name, list[i].outerHTML, target);
+                                }
+                            }
+                            var contentElements = document.getElementsByClassName("contents")[0].children;
+                            for (var i = 0; i < contentElements.length; i++) {
+                                var classList = contentElements[i].classList;
+                                var bContains = classList.contains(name);
+                                classList.remove(bContains ? "hidden" : "show");
+                                classList.add(bContains ? "show" : "hidden");
+                            }
+                        });
+                    }
+                    break;
+            }
+        }
+
+        cosmos.onCosmosMessageReceived = function (e) {
+            switch (e.xobj.getStr("msgID")) {
+                case "TANGRAMAPP_READY":
+                    {
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        cosmos.onMessageReceived = function (e) {
+            if (e.param3 != null) {
+                switch (e.param3) {
+                    case "MainMdiForm:ActiveClient":
+                        {
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        cosmos.onBindCLRObject = function (e) {
+            //alert(e.name);alert(e.objtype);alert(e.hwnd);
+        }
+
+    </script>
+</head>
+<body>
+    <!-- Define new DOM elements -->
+    <define tagName="mainWindow"></define>
+    <define tagName="application"></define>
+    <define tagName="webViewport"></define>
+    <define tagName="gridTemplate"></define>
+    <!-- End Define new DOM elements -->
+    <!-- The <application> grid is required, it can provide application-level configuration. -->
+    <application>
+        <modules>
+            <module libname="Sunny.exe" objname="Sunny.WebDelegate" functionname="Init"></module>
+        </modules>
+        <ntp>
+            <cluster> 
+                <xobj id='grid' rows='1' cols='2' width='350,350,' splitterwidth='6'>
+                    <xobj objid="nucleus"></xobj>
+                    <xobj objid="Sunny.ntpctrl,Sunny"></xobj>
+                </xobj>
+            </cluster> 
+        </ntp>
+        <defaultworkbench>
+            <cluster> 
+                <xobj style="18">
+                    <xobj id='tangramtabctrl_Page2' objid="nucleus" caption='Page 1'></xobj>
+                    <xobj id='test1 x' caption='Page 2' url="https://www.csdn.net|https://www.tangram.dev"></xobj>
+                    <xobj id='test2 y' caption='Page 3'></xobj>
+                    <xobj id='test3 z' caption='Page 4'></xobj>
+                </xobj>
+            </cluster> 
+        </defaultworkbench>
+        <urls><url url="https://www.tangram.dev"></url></urls>
+    </application>
+    <!-- Determine the main layout of the application, "Sunny.MDIParent1,Sunny" represents
+        the Sunny.MDIParent1 class in the current executable program. -->
+    <mainWindow objid="Sunny.form1,Sunny" caption="My Windows Forms App" width="1200" height="800">
+        <mainclient id="mainworkclient">
+            <default>
+                <cluster> 
+                    <xobj style="39" activepage="1">
+                        <xobj caption="Cloud Application" id='grid' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
+                            <xobj objid="nucleus"></xobj>
+                            <xobj objid="Sunny.ntpctrl,Sunny" id="SigmaBrowser_ntpctrl"></xobj>
+                        </xobj>
+                        <xobj caption="Virtual Web Browser Engine for Application" url="host"></xobj>
+                    </xobj>
+                </cluster> 
+            </default>
+        </mainclient>
+        <panel1 id="mainworkclient">
+            <default>
+                <cluster> 
+                    <xobj style="39" activepage="1">
+                        <xobj caption="Cloud Application" id='grid' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
+                            <xobj objid="nucleus"></xobj>
+                            <xobj objid="Sunny.ntpctrl,Sunny" id="SigmaBrowser_ntpctrl"></xobj>
+                        </xobj>
+                        <xobj caption="Virtual Web Browser Engine for Application" url="host"></xobj>
+                    </xobj>
+                </cluster> 
+            </default>
+        </panel1>
+    </mainWindow>
+    <gridTemplate type="usercontrol" objid="Sunny.NavControl,Sunny" uikey="navDetails">
+        <treeView1>
+            <uidata key="uidata" treenode="true" text="Welcome to the World of Virtual Web Browser Engine for Applications!">
+                <treeView1_tag name="content"></treeView1_tag>
+                <node1 treenode="true" text="New Web New Application World"></node1>
+                <node1_tag name="content1"></node1_tag>
+                <node2 treenode="true" text="Grid grid layout"></node2>
+                <node2_tag name="content2"></node2_tag>
+                <node3 treenode="true" text="Nested Grid layout"></node3>
+                <node3_tag name="content3"></node3_tag>
+                <node4 treenode="true" text="Tabbed grid layout"></node4>
+                <node4_tag name="content4"></node4_tag>
+                <node5 treenode="true" text="Nested grid layout"></node5>
+                <node5_tag name="content5"></node5_tag>
+                <node6 treenode="true" text="More Complex Nested grid layout"></node6>
+                <node6_tag name="content6"></node6_tag>
+            </uidata>
+        </treeView1>
+    </gridTemplate>
+    <webViewport>
+        <cluster> 
+            <xobj rows="1" cols="2" width="350,100,">
+                <xobj objid="navDetails" id="navCtrl"></xobj>
+                <xobj objid="nucleus" id="mainClient"></xobj>
+            </xobj>
+        </cluster> 
+    </webViewport>
+
+    <form1 id="mainwindow_1">
+        <cluster> 
+            <xobj id='properties' rows='2' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
+                <xobj id='tangramtabctrl_Page2' objid="nucleus" caption=''></xobj>
+                <xobj id='test1'></xobj>
+            </xobj>
+        </cluster> 
+    </form1>
+    <form id="mainwindow_2">
+        <cluster> 
+            <xobj style="18">
+                <xobj id='tangramtabctrl_Page2' objid="nucleus" caption='Page 1'></xobj>
+                <xobj id='test1' caption='Page 2'></xobj>
+                <xobj id='test2' caption='Page 3'></xobj>
+                <xobj id='test3' caption='Page 4'></xobj>
+            </xobj>
+        </cluster> 
+    </form>
+
+    <div class="contents">
+        <article class="show content markdown-body">
+            <h1>Virtual Web Browser Engine for Application</h1>
+            <p>Virtual Web Browser Engine for Application is a software runtime service that enables developers to organize software in the form of Web pages, it extends Java, COM, .NET, Win32 components into DOM elements of Web pages, allowing developers to develop application-oriented-web-page, each specific function of the application software is embodied in one or a group of application-oriented-web-pages, consumers can access each specific application function by accessing the URL.</p>
+            <p>This is a New and Dynamic Desktop Software World where you can combine most of the existing component frameworks, such as .NET, Java, COM, C++, Web and Office etc. ...</p>
+            <content target="mainClient">
+                <cluster> 
+                    <xobj style="39">
+                        <xobj caption="Virtual Web Browser Engine for Application" objid="nucleus"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl" caption="Customize your own WebBrowser"></xobj>
+                    </xobj>
+                </cluster> 
+            </content>
+        </article>
+        <article class="hidden content1 markdown-body">
+            <h1>New Web, New Application World!</h1>
+            <p>Virtual Web Browser Engine for Application constructs a new mixed world of native UI elements and web elements. In this world, a new web page is defined. While taking into account the standard web page, the ability to use native components as DOM elements is added ...</p>
+            <content1 target="mainClient">
+                <cluster> 
+                    <xobj style="18">
+                        <xobj caption="The mixed world of web and native UI" objid="nucleus"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Second Page"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Third Page"></xobj>
+                    </xobj>
+                </cluster> 
+            </content1>
+        </article>
+        <article class="hidden content2 markdown-body">
+            <h1>About Grid grid</h1>
+            <p>Grid grid refers to a grid structure with m rows and n columns. As a container grid, each child grid can carry a specific programmable object ...</p>
+            <content2 target="mainClient">
+                <cluster> 
+                    <xobj rows="3" cols="3" width="150,100,50" height="200,180,50">
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                        <xobj objid="nucleus"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                    </xobj>
+                </cluster> 
+            </content2>
+        </article>
+        <article class="hidden content3 markdown-body">
+            <h1>Nested Grid grid</h1>
+            <p>Nested Grid means that a Grid can be a child grid of another Grid. We allow nested structures to mean that developers can use "lines" to plan the layout of a rectangular structure ... ...</p>
+            <content3 target="mainClient">
+                <cluster> 
+                    <xobj rows="1" cols="2" width="200,100,">
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                        <xobj caption="Start Page" rows="3" cols="3" width="150,100,150" height="200,180,150">
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                            <xobj objid="nucleus"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                        </xobj>
+                    </xobj>
+                </cluster> 
+            </content3>
+        </article>
+        <article class="hidden content4 markdown-body">
+            <h1>Tabbed grid</h1>
+            <p>A Tabbed grid is a container grid which include a group of titled “tab structures". A tabbed grid with n tabs is equivalent to a "1 row and n columns" Grid ...</p>
+            <content4 target="mainClient">
+                <cluster> 
+                    <xobj style="23">
+                        <xobj caption="Introduction to Tabbed grid" objid="nucleus"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl" caption="Second Page"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                    </xobj>
+                </cluster> 
+            </content4>
+        </article>
+        <article class="hidden content5 markdown-body">
+            <h1>Compound grid: Tabbed grid with a Grid grid as a Child grid</h1>
+            <p>Compound grid refers to the "composite structure" formed by various container nodes. We allow Tabbed grid and Grid grid to "composite nest" so that developers can implement a more comprehensive UI layout ...</p>
+            <content5 target="mainClient">
+                <cluster> 
+                    <xobj style="23">
+                        <xobj caption="Nested grid" rows="3" cols="3" width="150,100,150" height="200,180,150">
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                            <xobj objid="nucleus"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                        </xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Second Page"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Third Page"></xobj>
+                    </xobj>
+                </cluster> 
+            </content5>
+        </article>
+        <article class="hidden content6 markdown-body">
+            <h1>More complex compound grid</h1>
+            <p>What is shown here is a three times composite page structure. Because the "tab structure" can have various "styles", each specific sub grid can carry various programmable objects, based on this, a comprehensive page structure can be formed. Thanks to the flexible and powerful description mechanism of HTML, so that the web page can present a page with dual advantages of native-web application...</p>
+            <content6 target="mainClient">
+                <cluster> 
+                    <xobj style="23">
+                        <xobj caption="Start Page" rows="3" cols="3" width="150,100,150" height="200,180,150">
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                            <xobj style="18" activepage="1">
+                                <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="First Page"></xobj>
+                                <xobj objid="nucleus" caption="Compound grid World Gives You An Unexpected Surprise"></xobj>
+                                <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl" caption="Third Page"></xobj>
+                            </xobj>
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                        </xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                    </xobj>
+                </cluster> 
+            </content6>
+        </article>
+    </div>
+</body>
+</html>
