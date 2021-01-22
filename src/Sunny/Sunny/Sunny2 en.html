@@ -1,0 +1,1090 @@
+﻿<!-- This is "index.html". Normally, it is named "ProjectName.index.html". This webpage is the real entry point of the HTML-driven App. -->
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Welcome to a new. Net world. I'm your friend Sunny</title>
+    <link rel="icon" href="webpage/app.png" sizes="32x32">
+    <style type="text/css">
+        .comments {
+            width: 100%; /*自动适应父布局宽度*/
+            height: auto;
+            overflow: auto;
+            word-break: break-all;
+        }
+
+        <style type="text/css" >
+        .markdown-body {
+            box-sizing: border-box;
+            min-width: 200px;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 45px;
+        }
+
+        @media (max-width: 767px) {
+            .markdown-body {
+                padding: 15px;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+
+    <style type="text/css">
+        table.sunnysolution, td.sunnysolution, th.sunnysolution {
+            border: 2px solid midnightblue;
+        }
+
+        td.sunnysolution {
+            vertical-align: top;
+        }
+    </style>
+
+    <script type="text/javascript">
+        var treegrid = null;
+        var mainClient_ = null;
+        var CompositeGrid_Splitter_ = null;
+        cosmos.onWinFormCreated = function (e) {
+            e.xobj.addEventListener("SizeChanged", function (x) {
+                //alert(x.getStr("currentevent") + " " + "Form width:" + x.getLong("width") + "\nheight:" + x.getLong("height"));
+            });
+        };
+
+        cosmos.onXobjCreated = function (e) {
+            switch (e.xobj.name) {
+                case "Sunny_ntpctrl":
+                    {
+                        e.grid.addEventListener("button1", "OnClick", Sunny_ntpctrl_Button_OnClick);
+                        e.grid.addEventListener("button2", "OnClick", Sunny_ntpctrl_Button2_OnClick);
+                    }
+                    break;
+                case "navCtrl":
+                    {
+                        treegrid = e.grid;
+                        e.grid.addEventListener("treeView1", "OnAfterSelect", navCtrl_treeView1_OnAfterSelect);
+                    }
+                    break;
+                case "mainClient":
+                    {
+                        mainClient_ = e.grid;
+                    }
+                    break;
+                case "CompositeGrid_Splitter":
+                    {
+                        CompositeGrid_Splitter_ = e.grid;
+                    }
+                    break;
+            }
+        }
+
+        cosmos.onCosmosMessageReceived = function (e) {
+            switch (e.xobj.getStr("msgID")) {
+                case "TANGRAMAPP_READY":
+                    {
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        cosmos.onMessageReceived = function (e) {
+            if (e.param3 != null) {
+                switch (e.param3) {
+                    case "MainMdiForm:ActiveClient":
+                        {
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        cosmos.onBindCLRObject = function (e) {
+            //alert(e.name);alert(e.objtype);alert(e.hwnd);
+        }
+
+        //****************************************************************
+        function Sunny_ntpctrl_Button_OnClick(e) {
+            e.grid.Observe("key1", document.getElementById("mainwindow_1").outerHTML);
+            if (e.grid.parent != null && e.grid.parent.xobj.getLong("gridtype") == 4) {
+                e.grid.parent.Observe(0, 0, "key1", document.getElementById("mainwindow_2").outerHTML);
+            }
+        }
+
+        function Sunny_ntpctrl_Button2_OnClick(e) {
+            e.grid.Observe("key2", document.getElementById("mainwindow_2").outerHTML);
+            if (e.grid.parent != null && e.grid.parent.xobj.getLong("gridtype") == 4) {
+                e.grid.parent.Observe(0, 0, "key2", document.getElementById("mainwindow_1").outerHTML);
+            }
+        }
+
+        function navCtrl_treeView1_OnAfterSelect(e) {
+            var name = e.getStr("name");
+            var list = document.getElementsByTagName(name);
+            for (var i = 0; i < list.length; i++) {
+                var target = list[i].getAttribute("target");
+                if (target != null) {
+                    e.grid.parent.Observe(0, 0, name, list[i].outerHTML, 0, 1);
+                }
+            }
+            var contentElements = document.getElementsByClassName("contents")[0].children;
+            for (var i = 0; i < contentElements.length; i++) {
+                var classList = contentElements[i].classList;
+                var bContains = classList.contains(name);
+                classList.remove(bContains ? "hidden" : "show");
+                classList.add(bContains ? "show" : "hidden");
+            }
+        }
+
+        function OpenNewWebURL() {
+            cosmos.openUrl("host:WebPage/newweb.html", 2);
+        }
+
+        function OpenCLEURL() {
+            cosmos.openUrl("host:webpage/CLE.html", 2);
+        }
+
+        function OpenAppURL() {
+            cosmos.openUrl("host:sunny2.html", 100);
+        }
+
+        function OnCreate_Form1_SunnyForms2() {
+            var xform = cosmos.createWinForm(document.getElementById("create_form_1").outerHTML,
+                0,
+                function (x) {
+                    x.form.addEventListener("button1", "OnClick", function (e) {
+                        x.form.xobj.setStr("textBox1", "fill textbox by javascript: " + x.form.handle);
+                    });
+                    x.form.BindCtrlValue("textBox1;button1", function (e) {
+                        //alert("hi" + "  --  " + e.getStr("textBox1"));
+                    });
+                });
+        }
+
+        function OnCreate_Form2_SunnyForms2() {
+            var xform = cosmos.createWinForm(document.getElementById("create_form_2").outerHTML,
+                0,
+                function (x) {
+                    x.form.addEventListener("button1", "OnClick", function (e) {
+                        alert("hi" + "  --  " + x.form.handle);
+                        //x.form.xobj.setStr("textBox1", "test modify textbox");
+                    });
+                });
+        }
+
+        function BrowserFormApp1() {
+            var xform = cosmos.createWinForm(document.getElementById("create_form_3").outerHTML,
+                0,
+                function (x) {
+                    x.form.addEventListener("button1", "OnClick", function (e) {
+                        alert("hi" + "  --  " + x.form.handle);
+                        //x.form.xobj.setStr("textBox1", "test modify textbox");
+                    });
+                });
+        }
+
+        function BrowserFormApp2() {
+            var xform = cosmos.createWinForm(document.getElementById("create_form_4").outerHTML,
+                0,
+                function (x) {
+                    x.form.addEventListener("button1", "OnClick", function (e) {
+                        alert("hi" + "  --  " + x.form.handle);
+                        //x.form.xobj.setStr("textBox1", "test modify textbox");
+                    });
+                });
+        }
+
+        function OpenAppURL2() {
+            cosmos.openUrl("host:webpage/newweb.html", 100);
+        }
+
+        function OpenCWRURL() {
+            cosmos.openUrl("host:webpage/CWR.html", 2);
+        }
+
+        function OpenCERURL() {
+            cosmos.openUrl("host:webpage/CER.html", 2);
+        }
+
+        function CompositeGrid1() {
+            if (CompositeGrid_Splitter_) {
+                CompositeGrid_Splitter_.getChild(0, 1).Observe("layout_1", document.getElementById("layout_1").outerHTML);
+            }
+        }
+
+        function CompositeGrid2() {
+            if (CompositeGrid_Splitter_) {
+                CompositeGrid_Splitter_.getChild(0, 1).Observe("layout_2", document.getElementById("layout_2").outerHTML);
+            }
+        }
+
+        function CompositeGrid3() {
+            if (CompositeGrid_Splitter_) {
+                CompositeGrid_Splitter_.getChild(0, 1).Observe("layout_3", document.getElementById("layout_3").outerHTML);
+            }
+        }
+
+        function CompositeGrid4() {
+            if (CompositeGrid_Splitter_) {
+                CompositeGrid_Splitter_.getChild(0, 1).Observe("layout_4", document.getElementById("layout_4").outerHTML);
+            }
+        }
+
+        //**********************************************
+        function DynLayout() {
+            if (treegrid) {
+                treegrid.parent.Observe(0, 0, "layout_1", document.getElementById("layout_1").outerHTML, 0, 1);
+                document.getElementById("dynlayoutdomelement").value = document.getElementById("layout_1").outerHTML;
+            }
+        }
+
+        function DynLayout1() {
+            if (treegrid) {
+                treegrid.parent.Observe(0, 0, "layout_2", document.getElementById("layout_2").outerHTML, 0, 1);
+                document.getElementById("dynlayoutdomelement").value = document.getElementById("layout_2").outerHTML;
+            }
+        }
+
+        function DynLayout2() {
+            if (treegrid) {
+                treegrid.parent.Observe(0, 0, "layout_3", document.getElementById("layout_3").outerHTML, 0, 1);
+                document.getElementById("dynlayoutdomelement").value = document.getElementById("layout_3").outerHTML;
+            }
+        }
+
+        function DynLayout3() {
+            if (treegrid) {
+                treegrid.parent.Observe(0, 0, "layout_4", document.getElementById("layout_4").outerHTML, 0, 1);
+                document.getElementById("dynlayoutdomelement").value = document.getElementById("layout_4").outerHTML;
+            }
+        }
+
+        function DynLayout4() {
+            if (treegrid) {
+                treegrid.parent.Observe(0, 0, "layout_5", document.getElementById("layout_5").outerHTML, 0, 1);
+                document.getElementById("dynlayoutdomelement").value = document.getElementById("layout_5").outerHTML;
+            }
+        }
+
+        function DynLayout5() {
+            if (treegrid) {
+                treegrid.parent.Observe(0, 0, "layout_6", document.getElementById("layout_6").outerHTML, 0, 1);
+                document.getElementById("dynlayoutdomelement").value = document.getElementById("layout_6").outerHTML;
+            }
+        }
+
+        function OnSubversion() {
+            if (mainClient_) {
+                mainClient_.parent.Observe(0, 0, "subversion", document.getElementById("subversion").outerHTML, 0, 1);
+                var name = "startup";
+                var contentElements = document.getElementsByClassName("contents")[0].children;
+                for (var i = 0; i < contentElements.length; i++) {
+                    var classList = contentElements[i].classList;
+                    var bContains = classList.contains(name);
+                    classList.remove(bContains ? "hidden" : "show");
+                    classList.add(bContains ? "show" : "hidden");
+                }
+            }
+        }
+    </script>
+</head>
+<body background="image/sunny.jpg">
+    <!-- Define new DOM elements -->
+    <define tagName="mainWindow"></define>
+    <define tagName="webViewport"></define>
+    <define tagName="gridTemplate"></define>
+    <!-- End Define new DOM elements -->
+    <!-- The "application" element is required, it can provide application-level configuration. -->
+    <!-- Determine the main layout of the application, "Sunny.MDIParent1,host" represents
+        the Sunny.MDIParent1 class in the current executable program. -->
+    <gridTemplate type="usercontrol" objid="Sunny.NavControl,host" uikey="navDetails">
+        <treeView1>
+            <uidata key="uidata" treenode="true" text="Welcome to Sunny's New World of .Net...">
+                <treeView1_tag name="startup"></treeView1_tag>
+                <node1 treenode="true" text="This is a new world of .Net applications"></node1>
+                <node1_tag name="content1"></node1_tag>
+                <node_organize_app_tag name="content_organize_app"></node_organize_app_tag>
+                <virtuallayoutengine treenode="true" text="Common Layout Engine(CLE)">
+                    <xobj treenode="true" text="Grid"></xobj>
+                    <grid_tag name="content_grid"></grid_tag>
+                    <tabgrid treenode="true" text="Tabbed Window"></tabgrid>
+                    <tabgrid_tag name="tabgrid"></tabgrid_tag>
+                    <node6 treenode="true" text="Multi-Level Grid"></node6>
+                    <node6_tag name="compositegrid"></node6_tag>
+                </virtuallayoutengine>
+                <virtuallayoutengine_tag name="contentcle"></virtuallayoutengine_tag>
+                <openwebruntime treenode="true" text="Common Web Runtime(CWR)">
+                    <usingbuiltbrowser treenode="true" text="Using Web Pages"></usingbuiltbrowser>
+                    <usingbuiltbrowser_tag name="content_using_browser"></usingbuiltbrowser_tag>
+                </openwebruntime>
+                <openwebruntime_tag name="content_cwr"></openwebruntime_tag>
+                <openeclipseruntime treenode="true" text="Common EclipseRuntime(CER)">
+                    <node_workbench treenode="true" text="Using WorkBench"></node_workbench>
+                    <node_workbench_tag name="content_using_workbench"></node_workbench_tag>
+                    <node_swt treenode="true" text="Using SWT"></node_swt>
+                    <node_swt_tag name="content_using_swt"></node_swt_tag>
+                </openeclipseruntime>
+                <openeclipseruntime_tag name="content_cer"></openeclipseruntime_tag>
+            </uidata>
+        </treeView1>
+    </gridTemplate>
+    <webViewport>
+        <cluster> 
+            <xobj rows="1" cols="2" width="750,">
+                <xobj objid="navDetails" id="navCtrl"></xobj>
+                <xobj objid="nucleus" id="mainClient"></xobj>
+            </xobj>
+        </cluster> 
+    </webViewport>
+    <cluster> 
+        <layout_1 id="layout_1">
+            <cluster> 
+                <xobj style="18">
+                    <xobj caption="Start Page" rows="3" cols="3" width="150,100,100" height="200,180,100">
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyForms.Form1,SunnyForms"></xobj>
+                        <xobj style="39" activepage="1">
+                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="First Page"></xobj>
+                            <xobj objid="nucleus" caption="Compound grid World Gives You An Unexpected Surprise"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl" caption="Third Page"></xobj>
+                        </xobj>
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                    </xobj>
+                    <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
+                    <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                </xobj>
+            </cluster> 
+        </layout_1>
+        <layout_2 id="layout_2">
+            <cluster> 
+                <xobj style="33">
+                    <xobj caption="Start Page" rows="3" cols="3" width="150,100,100" height="200,180,100">
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyForms.Form1,SunnyForms"></xobj>
+                        <xobj style="18" activepage="1">
+                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="First Page"></xobj>
+                            <xobj objid="nucleus" caption="Compound grid World Gives You An Unexpected Surprise"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl" caption="Third Page"></xobj>
+                        </xobj>
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                    </xobj>
+                    <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
+                    <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                </xobj>
+            </cluster> 
+        </layout_2>
+        <layout_3 id="layout_3">
+            <cluster> 
+                <xobj style="23">
+                    <xobj caption="Start Page" rows="3" cols="3" width="150,100,100" height="200,180,100">
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyForms.Form1,SunnyForms"></xobj>
+                        <xobj style="18" activepage="1">
+                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="First Page"></xobj>
+                            <xobj objid="nucleus" caption="Compound grid World Gives You An Unexpected Surprise"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl" caption="Third Page"></xobj>
+                        </xobj>
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                    </xobj>
+                    <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
+                    <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                </xobj>
+            </cluster> 
+        </layout_3>
+        <layout_4 id="layout_4">
+            <cluster> 
+                <xobj style="43">
+                    <xobj caption="Start Page" rows="3" cols="3" width="150,100,100" height="200,180,100">
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyForms.Form1,SunnyForms"></xobj>
+                        <xobj style="29" activepage="1">
+                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="First Page"></xobj>
+                            <xobj objid="nucleus" caption="Compound grid World Gives You An Unexpected Surprise"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl" caption="Third Page"></xobj>
+                        </xobj>
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                    </xobj>
+                    <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
+                    <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                </xobj>
+            </cluster> 
+        </layout_4>
+        <layout_5 id="layout_5">
+            <cluster> 
+                <xobj style="37">
+                    <xobj caption="Start Page" rows="3" cols="3" width="150,100,100" height="200,180,100">
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyForms.Form1,SunnyForms"></xobj>
+                        <xobj style="19" activepage="1">
+                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="First Page"></xobj>
+                            <xobj objid="nucleus" caption="Compound grid World Gives You An Unexpected Surprise"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl" caption="Third Page"></xobj>
+                        </xobj>
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                    </xobj>
+                    <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
+                    <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                </xobj>
+            </cluster> 
+        </layout_5>
+        <layout_6 id="layout_6">
+            <cluster> 
+                <xobj style="18">
+                    <xobj caption="Start Page" rows="3" cols="3" width="150,100,100" height="200,180,100">
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyForms.Form1,SunnyForms"></xobj>
+                        <xobj style="18" activepage="1">
+                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="First Page"></xobj>
+                            <xobj objid="nucleus" caption="Compound grid World Gives You An Unexpected Surprise"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl" caption="Third Page"></xobj>
+                        </xobj>
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                    </xobj>
+                    <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
+                    <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                </xobj>
+            </cluster> 
+        </layout_6>
+
+        <form1 id="mainwindow_1">
+            <cluster> 
+                <xobj id='properties' rows='2' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
+                    <xobj id='tangramtabctrl_Page2' objid="nucleus" caption=''></xobj>
+                    <xobj id='test1'></xobj>
+                </xobj>
+            </cluster> 
+        </form1>
+        <form id="mainwindow_2">
+            <cluster> 
+                <xobj style="18">
+                    <xobj id='tangramtabctrl_Page2' objid="nucleus" caption='Page 1'></xobj>
+                    <xobj id='test1' caption='Page 2'></xobj>
+                    <xobj id='test2' caption='Page 3'></xobj>
+                    <xobj id='test3' caption='Page 4'></xobj>
+                </xobj>
+            </cluster> 
+        </form>
+        <subversion id="subversion">
+            <cluster> 
+                <xobj rows="2" cols="1" height="400,500">
+                    <xobj objid="nucleus"></xobj>
+                    <xobj url="host:WebPage\webdesktop.html"></xobj>
+                </xobj>
+            </cluster> 
+        </subversion>
+    </cluster> 
+    <Forms>
+        <Form1 type="winform" objid="sunnyForms2.Form1,sunnyForms2" caption="Form1@SunnyForm2" id="create_form_1" width="1600" height="1200">
+            <mainpanel>
+                <default>
+                    <cluster> 
+                        <xobj id='properties' rows='2' cols='1' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
+                            <xobj id='tangramtabctrl_Page2' objid="nucleus" caption=''></xobj>
+                            <xobj id='create_form_message' objid="sunnyForms2.Form4,sunnyForms2"></xobj>
+                        </xobj>
+                    </cluster> 
+                </default>
+            </mainpanel>
+        </Form1>
+        <Form2 type="winform" objid="sunnyForms2.Form2,sunnyForms2" caption="Form2@SunnyForm2" id="create_form_2" width="1600" height="1200">
+            <mainpanel>
+                <default>
+                    <cluster> 
+                        <xobj>
+                            <xobj id='tangramtabctrl_Page1' objid="sunnyForms2.Form3,SunnyForms2" caption='Form3'></xobj>
+                            <xobj id='tangramtabctrl_Page2' objid="sunnyForms2.Form4,SunnyForms2" caption='Form4'></xobj>
+                            <xobj id='tangramtabctrl_Page2' objid="sunnyForms2.Form5,SunnyForms2" caption='Form5'></xobj>
+                        </xobj>
+                    </cluster> 
+                </default>
+            </mainpanel>
+        </Form2>
+        <Form3 type="winform" objid="sunnyForms2.Form2,sunnyForms2" caption="Form2@SunnyForm2" id="create_form_2" width="1600" height="1200">
+            <mainpanel>
+                <default>
+                    <cluster> 
+                        <xobj>
+                            <xobj id='tangramtabctrl_Page1' objid="sunnyForms2.Form3,sunnyForms2" caption='Form3'></xobj>
+                            <xobj id='tangramtabctrl_Page2' objid="sunnyForms2.Form4,sunnyForms2" caption='Form4'></xobj>
+                            <xobj id='tangramtabctrl_Page2' objid="sunnyForms2.Form5,sunnyForms2" caption='Form5'></xobj>
+                        </xobj>
+                    </cluster> 
+                </default>
+            </mainpanel>
+        </Form3>
+        <Form4 type="winform" objid="sunnyForms2.Form3,sunnyForms2" caption="Form3@SunnyForm2" id="create_form_3" width="2000" height="1600">
+            <mainpanel>
+                <default>
+                    <cluster> 
+                        <xobj id='tangramtabctrl_Page1' url="host:webpage\cwr.html" caption='Form3'></xobj>
+                    </cluster> 
+                </default>
+            </mainpanel>
+        </Form4>
+        <object type="winform" objid="sunnyForms2.Form4,sunnyForms2" caption="Form4@SunnyForm2" id="create_form_4" width="2000" height="1600">
+            <mainpanel>
+                <default>
+                    <cluster> 
+                        <xobj rows="1" cols="2" width="500,200" masterrow="0" mastercol="0">
+                            <xobj rows="2" cols="1" height="400,200" masterrow="0" mastercol="0">
+                                <xobj id='Page1' url="host:webpage\cwr.html|host:sunny2.html"></xobj>
+                            </xobj>
+                            <xobj id='Page2' caption='Form3'></xobj>
+                        </xobj>
+                    </cluster> 
+                </default>
+            </mainpanel>
+        </object>
+    </Forms>
+    <div class="contents">
+        <article class="show startup markdown-body">
+            <strong style="font-size:32px; color:black">Welcome <i style="color:fuchsia">to </i><i style="color:blue">Sunny's </i><b style="color:coral">.NET Desktop Programming World</b>!</strong>
+            <p style="font-size: 20px; font-weight:bold; color:black">
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspSunny is a <i style="color:chocolate">disruptive, Internet-facing </i> <b style="color:Highlight">open source</b> desktop software development framework,
+                the key feature of which is the <i style="color:orangered">integration of Microsoft .NET, Chromium Project, and IBM Eclipse</i> three open source projects,
+                making .NET desktop applications can support the .NET, Java, and Web software ecosystems in a consistent manner.
+            </p>
+            <p>
+                <h1 style="font-size: 16px; color:darkgreen">
+                    <a href="#" onclick="OpenNewWebURL();"><i style="font-size:64px; color:darkgreen">Click</i>here to start...</a>
+                    <a href="#" onclick="OpenCLEURL();" style="color:forestgreen">Common Layout Engine</a>
+                    <a href="#" onclick="OpenCWRURL();" style="color:blue"><i style="font-size: 20px;">Common Web Runtime</i></a>
+                    <a href="#" onclick="OpenCERURL();" style="color:forestgreen">Common Eclipse Runtime</a>
+                </h1>
+            </p>
+            <center>
+                <table class="sunnysolution" border="1" cellpadding="10">
+                    <thead>
+                        <tr style="font-size: 16px; font-weight:bold; color:midnightblue">
+                            <th> <i style="color:crimson">Three key problems</i> of modern desktop software
+                            <th> Sunny's solution
+                        </tr>
+                    <tbody>
+                        <tr>
+                            <td class="sunnysolution" width="50%">
+                                <ol style="font-size: 16px; font-weight:bold; color:midnightblue">
+                                    <li>
+                                        The lack of a suitable <i style="font-style:oblique; color:chocolate">software ecosystem</i>,  which directly leads to the accumulation of a large number of mature software components (.NET, Java, COM, C++, Web components),
+                                        as well as a wide range of software human resources difficult to form targeted software value-added services according to the corresponding software,
+                                        will fundamentally restrict the software to become the <i style="color:orangered">front-end link of Internet services</i>, more difficult to build a <i style="color:fuchsia">service-oriented back-end services</i>；
+                                    </li>
+                                    <li>
+                                        Lack of <i style=" color:chocolate">docking with mainstream open source projects </i>leaves software-dependent critical technologies without strong technical community support. In the case of Chrome and Eclipse, because it is open source,
+                                        it has natural community support，so that the development of the software itself will become benign and has the basis for sustainable survival;
+                                    </li>
+                                    <li>
+                                        The modern browser itself is a desktop software, which enriches the content ecosystem by supporting html documents. There is no doubt that many qualities of browser software are limited to the browser itself, which is a kind of imprisonment to software productivity, and many advantages of the browser itself are precisely what desktop software does not have, that is, desktop software lacks the inherent structure of the browser. This is why it is difficult to adapt to the development of the Internet.
+                                    </li>
+                                </ol>
+                                <p style="font-size: 16px; font-weight:bold; color:blueviolet">
+                                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFrom a technical, the scope of technical manpower reserve and other point of view, the above three issues, <i style="font-weight:bold; color:chocolate">greatly beyond a software team's technical control range and the scope of technical manpower reserve can bear the boundaries</i>, that is, it is difficult to imagine a team can face the system at the same time as the above three problems. Desktop software development has been nearly 30 years of history, mature technologies from .Net, Java, COM, C++, Web and other fields are massive,  <ins style="font-size: 16px; font-weight:bold; color:forestgreen">whether there is a general technical approach, so that software teams can avoid the limitations of overall technology and human resources, and directly apply mature technologies to the software services they are concerned about is a challenging problem</ins>.
+                                </p>
+                                <p style="font-size: 16px; font-weight:bold; color:blueviolet">
+                                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFrom the point of view of software reuse, the software service team should not focus on how to achieve a wide range of integration of specific technologies, in fact, there should be a <i style="font-weight:bold; color:chocolate">common technical approach</i>, so that the software service team focused on how to use mature software resources content "organization" software services, which needs to solve a reasonable, universal fit problem at a macro level, that is, <b style="font-size: 16px; font-weight:bold; color:darkblue"><ins>the current environment needs a simple type of technology, so that the application in the infrastructure of the root link, a one-time (relatively independent of technology) to solve a desktop software and "Web, .NET, Java" and other mainstream technologies based on ecological technology convergence, this convergence for the software service team is consistent, almost thresholdless, can maximize the use of software components and human resources "one-stop" solution.</ins></b>
+                                </p>
+                            </td>
+                            <td class="sunnysolution" width="50%" rowspan=5>
+                                <p style="font-size: 16px; font-weight:bold; color:blueviolet">
+                                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspSunny defines <i style="color:brown">the infrastructure</i> of an application, giving a one-stop solution that will:
+                                </p>
+                                <ol style="font-size: 16px; font-weight:bold; color:midnightblue">
+                                    <li><b style="color:chocolate">Software Eco Chain</b>(for .Net resources, Java resources, Web resources)</li>
+                                    <li><b>Mainstream open source project docking (Chromium Project, Eclipse, .NET Core, etc.)</b></li>
+                                    <li><b>Integrated modern browser full functionality (full-featured Build-in WebBrowser support)</b></li>
+                                </ol>
+                                <p style="font-size: 16px; font-weight:bold; color:blueviolet">
+                                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspThrough a single technology architecture, one-time to software architects,
+                                    each Sunny technology-based .NET desktop application has the following key features directly:
+                                </p>
+                                <ol style="font-size: 16px; font-weight:bold; color:midnightblue">
+                                    <li>
+                                        <b>Support <a href="#" onclick="OpenCLEURL();" style="font-size: 20px; color:forestgreen">Common Layout Engine</a></b>：Refreshing dynamic layout engine, will in turn in a variety of activities .NET components, C++ and Web components...
+                                        lay the foundation for a realistic software ecosystem.<br />
+                                        <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="DynLayout()">Dynamic Layout One</button>
+                                        <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="DynLayout1()">Dynamic Layout Two</button>
+                                        <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="DynLayout2()">Dynamic Layout Three</button>
+                                        <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="DynLayout3()">Dynamic Layout Four</button>
+                                        <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="DynLayout4()">Dynamic Layout Five</button>
+                                        <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="DynLayout5()">Dynamic Layout Six</button>
+                                    </li>
+                                    <li>
+                                        <b>Support <a href="#" onclick="OpenCWRURL();" style="font-size: 20px; color:forestgreen">Common Web Runtime</a></b>：Unique Build-in browser technology allows you to harness "Web-Desktop" hybrid content in a variety of flexible ways,
+                                        your desktop software can adapt to Internet services in the most flexible way possible, and a larger DOM allows you to achieve optimal Web-to-desktop control, making application paged into reality,
+                                        which in turn enables software to build an Internet content ecosystem based on Web technology.
+                                    </li>
+                                    <li>
+                                        <b>Support<a href="#" onclick="OpenCERURL();" style="font-size: 20px; color:forestgreen">Common Eclipse Runtime</a></b>：Bulit-in Eclipses enables you to freely navigate Java components, combining Java, .Net,
+                                        and JavaScript to enable powerful "web-desktop" interoperability. Combined with Eclipse's own ecological technology, Sunny uses CER to enable application developers to build Java-based application ecosystems.
+                                    </li>
+                                </ol>
+                                <p style="font-size: 16px; font-weight:bold; color:blueviolet">
+                                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspSunny is trying to integrate through a single technology architecture:
+                                    <ul style="font-size: 16px; font-weight:bold; color:midnightblue">
+                                        <li>Microsoft .NET(Core)</li>
+                                        <li>Google Chromium</li>
+                                        <li>IBM Eclipse</li>
+                                    </ul>
+                                </p>
+                                <p style="font-size: 16px; font-weight:bold; color:blueviolet">
+                                    So that the software ecosystem can be built on the basis of a large technology community, while making Internet services become a fundamental part of desktop software,
+                                    developers only need to make full use of, without worrying about bridging problems.
+                                </p>
+                            </td>
+                    </tbody>
+                </table>
+            </center>
+
+            <startup target="mainClient">
+                <cluster> 
+                    <xobj>
+                        <xobj caption="New Web, New Desktop World" objid="nucleus"></xobj>
+                        <xobj caption="New Start point" objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                    </xobj>
+                </cluster> 
+            </startup>
+        </article>
+        <article class="hidden content1 markdown-body">
+            <x style="font-size:40px; color:crimson">Sunny's <i style="font-size:40px; color:fuchsia">New </i>World of .NET</x>
+            <center><p style="font-size: 32px; font-weight: bold; color: blue"><i style="color:brown">DOM </i>Define .NET</p></center>
+            <h4>Using DOM to define new .Net elements enables us to add new elements to the application system with the help of web pages outside a software system</h4>
+            <p>
+                Common Web Runtime constructs a new mixed world of native UI elements and web elements.
+                In this world, a new web page is defined. While taking into account the standard web page,
+                the ability to use native components as DOM elements is added ...
+            </p>
+            <content1 target="mainClient">
+                <cluster> 
+                    <xobj style="18">
+                        <xobj caption="The mixed world of web and native UI" objid="nucleus"></xobj>
+                        <xobj caption="Second Page" objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                        <xobj caption="Third Page" objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                    </xobj>
+                </cluster> 
+            </content1>
+        </article>
+        <article class="hidden contentcle markdown-body">
+            <x style="font-size:40px; color:crimson">Sunny's <i style="font-size:40px; color:fuchsia">New </i>World of .NET<strong></strong></x>
+            <center style="font-size:40px; color:green"><h2>Common Layout Engine</h2></center>
+            <p style="font-size: 28px;font-weight: bold; color: black">Common Layout Engine is a Multi-Level, Gridded, Nestable, easy to describe UI layout description engine.</p>
+            <p style="font-size: 24px;font-weight: bold; color: blue">
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspThe so-called <i style="color:brown">grid</i> is a window matrix with m rows and n columns (a grid with 1 row and n columns can be understood as a tab window with n tabs),
+                and nestable means that each "grid" in the matrix can be Multiple grid layers are dynamically nested, and only one layer is visible at runtime.
+            </p>
+            <p style="font-size: 24px;font-weight: bold; color:cornflowerblue">
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspGenerally speaking, a layout may be uncertain at design time and can be dynamically generated at runtime.
+                Due to different scenarios, permissions and other factors, different dynamic matching may be carried out. In fact, flexible layout is the result of dynamic changes of multi-layer grid.
+            </p>
+            <p style="font-size: 24px;font-weight: bold; color:burlywood">
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspThere are two ways to describe grid: one is based on XML, which can be used in various programming languages; the other is based on DOM element of web page.
+                The advantage of this scheme is that it is easy to connect with mainstream Internet technology.
+            </p>
+            <contentcle target="mainClient">
+                <cluster> 
+                    <xobj objid="nucleus"></xobj>
+                </cluster> 
+            </contentcle>
+            <button style="font-size: 24px;font-weight: bold; color:crimson" onclick="DynLayout()">Dynamic Layout One</button>
+            <button style="font-size: 24px;font-weight: bold; color:crimson" onclick="DynLayout1()">Dynamic Layout Two</button>
+            <button style="font-size: 24px;font-weight: bold; color:crimson" onclick="DynLayout2()">Dynamic Layout Three</button>
+            <button style="font-size: 24px;font-weight: bold; color:crimson" onclick="DynLayout3()">Dynamic Layout Four</button>
+            <button style="font-size: 24px;font-weight: bold; color:crimson" onclick="DynLayout4()">Dynamic Layout Five</button>
+            <button style="font-size: 24px;font-weight: bold; color:crimson" onclick="DynLayout5()">Dynamic Layout Six</button>
+            <h3>Dynamic layout DOM description (press a button to see DOM output):</h3>
+            <center><textarea name="dynlayoutdomelement" id="dynlayoutdomelement" class="tb" disabled="disabled" style="width: 96%; height: 300px; margin: 0px;"></textarea></center>
+        </article>
+        <article class="hidden content_grid markdown-body">
+            <center style="font-size:36px; color:blue"><b>Grid</b></center>
+            <p style="font-size:24px; color:chocolate">
+                <b>
+                    <i>Grid</i>
+                    <x style="font-size:24px; color:black">
+                        is a window matrix with M rows and N columns. As a container, a specific "grid" in the grid can host a new grid or a programmable object, such as .Net UserControl, WinForm or WPF object, or other objects implemented by C + +, such as MFC CView……
+                    </x>
+                </b>
+            </p>
+            <content_grid target="mainClient">
+                <cluster> 
+                    <xobj rows="3" cols="3" width="150,100,100" height="200,180,100">
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                        <xobj objid="nucleus"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                    </xobj>
+                </cluster> 
+            </content_grid>
+            <p>
+                <b style="font-size:24px; color:black">
+                    In a specific web page or an XML document, a DOM element corresponding to "grid" can be defined in the following format. Here, a description of DOM corresponding to a grid structure of 3 rows and 3 columns is given. Please refer to Sunny.index.html
+                    <xmp style="font-size:28px; color:blue">
+                        <content_grid target="mainClient">
+                            <cluster> 
+                                <xobj rows="3" cols="3" width="150,100,100" height="200,180,100">
+                                    <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                                    <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                                    <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                                    <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                                    <xobj objid="nucleus"></xobj>
+                                    <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                                    <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                                    <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                                    <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                                </xobj>
+                            </cluster> 
+                        </content_grid>
+                    </xmp>
+                </b>
+            </p>
+            <h3>
+                A grid without child nodes can host specific programmable objects, or the runtime can host a new grid structure, depending on the specific programming requirements. When we clearly need a grid to hold a specific object, we need to specify the "objid" attribute of the object.
+            </h3>
+            <h3>
+                Currently Sunny can support several types of programmable objects, including:
+                <ol style="font-size:28px; color:red">
+                    <li><b>.NET UI Object</b></li>
+                    <li><b>ActiveX Control</b></li>
+                    <li><b>C++ objects conforming to certain specifications</b></li>
+                    <li><b>Web Page</b></li>
+                </ol>
+            </h3>
+            <h3>
+                For .Net UI, we generally refer to WinForm, UserControl and WPF, and UWP support will be added in subsequent versions. When a grid loads the. Net UI, the objid attribute is the AssemblyQualifiedName of the object. Usually, it is a string such as "A.B, C", where a is the object's namespace, B is the class name, and C is the component name.
+            </h3>
+            <h3>
+                For example, suppose we have a .Net component library xxx.dll , where there is a formx object whose namespace is "mynamespace", then objid is“ MyNamespace.FormX,XXX ", and the corresponding grid nodes are as follows：
+            </h3>
+            <b><xmp style="font-size:30px; color:blue"><xobj objid="MyNamespace.FormX,xxx"></xobj></xmp></b>
+        </article>
+        <article class="hidden tabgrid markdown-body">
+            <center style="font-size:36px; color:blue"><b>Tab</b></center>
+            <p style="font-size:24px; color:black">
+                <b>
+                    If a grid element contains child nodes, and the grid does not have "rows" and "cols" attributes, sunny interprets it as a "tab", and the number of tabs it contains is the number of its child nodes.
+                </b>
+            </p>
+            <tabgrid target="mainClient">
+                <cluster> 
+                    <xobj>
+                        <xobj caption="Introduction to Tabbed Grid" objid="nucleus"></xobj>
+                        <xobj caption="Second Page" objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj caption="Third Page" objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                    </xobj>
+                </cluster> 
+            </tabgrid>
+            <figcaption>
+                <p>
+                    <b>
+                        Tab style: set with style attribute, style = "mn" (the default value is "19"), where the value of m can be 1 (left), 2 (top), 3 (right) and 4 (bottom), respectively, corresponding to four edges; the value of n can be 0-9, corresponding to 10 different tab display styles.
+                    </b>
+                </p>
+            </figcaption>
+            <center>
+                <table border="1" cellpadding="10">
+                    <thead>
+                        <tr>
+                            <th> Tabbed Layout
+                            <th> Script
+
+                    <tbody>
+                        <tr>
+                            <td> <img src="image/tabbed.png" width="300" height="280" />
+                            <td>
+                                <b>
+                                    The display style = "23" indicates that the tab is the left tab
+                                    <p>
+                                        On a web page or in XML, a tab can be described as follows:
+                                        <xmp style=" font-size: 10px; font-weight: 900; color: blue">
+                                            <tabgrid target="mainClient">
+                                                <cluster> 
+                                                    <xobj style="23">
+                                                        <xobj caption="Introduction to Tabbed Grid" objid="nucleus"></xobj>
+                                                        <xobj caption="Second Page" objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                                                        <xobj caption="Third Page" objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                                                    </xobj>
+                                                </cluster> 
+                                            </tabgrid>
+                                        </xmp>
+                                    </p>
+                                </b>
+                        <tr>
+                            <td> <img src="image/tabbed19.png" width="300" height="280" />
+                            <td>
+                                <b>
+                                    The display style = "19" indicates that the tab is the top tab
+                                    <p>
+                                        On a web page or in XML, a tab can be described as follows:
+                                        <xmp style=" font-size: 10px; font-weight: 900; color: blue">
+                                            <tabgrid target="mainClient">
+                                                <cluster> 
+                                                    <xobj style="19">
+                                                        <xobj caption="Introduction to Tabbed Grid" objid="nucleus"></xobj>
+                                                        <xobj caption="Second Page" objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                                                        <xobj caption="Third Page" objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                                                    </xobj>
+                                                </cluster> 
+                                            </tabgrid>
+                                        </xmp>
+                                    </p>
+                                </b>
+                        <tr>
+                            <td> <img src="image/tabbed18.png" width="300" height="280" />
+                            <td>
+                                <b>
+                                    The display style = "18" indicates that the label is a outlook bar type tab
+                                    <p>
+                                        On a web page or in XML, a tab can be described as follows:
+                                        <xmp style=" font-size: 10px; font-weight: 900; color: blue">
+                                            <tabgrid target="mainClient">
+                                                <cluster> 
+                                                    <xobj style="18">
+                                                        <xobj caption="Introduction to Tabbed Grid" objid="nucleus"></xobj>
+                                                        <xobj caption="Second Page" objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                                                        <xobj caption="Third Page" objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                                                    </xobj>
+                                                </cluster> 
+                                            </tabgrid>
+                                        </xmp>
+                                    </p>
+                                </b>
+                </table>
+            </center>
+        </article>
+        <article class="hidden compositegrid markdown-body">
+            <center style="font-size: 36px; font-weight: 900; color: blue"><b>Multi-Level Grid Layout</b></center>
+            <p style="font-size: 24px; font-weight: 900; color: black">
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspThe grid layout structure supports any level of "grid composite", because the "tab structure" can have multiple "styles", and each specific sub-grid can carry various programmable objects, which can form a more general basis With an integrated and integrated layout structure, the host application system can present a web application ecology with the dual advantages of native applications and web applications through web pages. Here is how to express the DOM structure of a "three-level composite" grid on a Web page or in xml:
+                <xmp style=" font-size: 24px; font-weight: 900; color: blue">
+                    <compositegrid target="mainClient">
+                        <cluster> 
+                            <xobj style="23">
+                                <xobj caption="Start Page" rows="3" cols="3" width="150,100,100" height="200,180,100">
+                                    <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                                    <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                                    <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                                    <xobj objid="SunnyForms.Form1,SunnyForms"></xobj>
+                                    <xobj style="18" activepage="1">
+                                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="First Page"></xobj>
+                                        <xobj objid="nucleus" caption="Compound grid World Gives You An Unexpected Surprise"></xobj>
+                                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl" caption="Third Page"></xobj>
+                                    </xobj>
+                                    <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                                    <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                                    <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                                    <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                                </xobj>
+                                <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
+                                <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                            </xobj>
+                        </cluster> 
+                    </compositegrid>
+                </xmp>
+            </p>
+            <compositegrid target="mainClient">
+                <cluster> 
+                    <xobj style="23">
+                        <xobj caption="Start Page" id="CompositeGrid_Splitter" rows="3" cols="3" width="150,100,100" height="200,180,100">
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyForms.Form1,SunnyForms"></xobj>
+                            <xobj style="18" activepage="1">
+                                <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="First Page"></xobj>
+                                <xobj objid="nucleus" caption="Compound grid World Gives You An Unexpected Surprise"></xobj>
+                                <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl" caption="Third Page"></xobj>
+                            </xobj>
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                        </xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                    </xobj>
+                </cluster> 
+            </compositegrid>
+            <p style=" font-size: 24px; font-weight: 900; color: blue">For more composite structures, you can click the following buttons:</p>
+            <center>
+                <button style=" font-size: 24px; font-weight: 900; color: black" onclick="CompositeGrid1()">Composite grid 1</button>
+                <button style=" font-size: 24px; font-weight: 900; color: black" onclick="CompositeGrid2()">Composite grid 2</button>
+                <button style=" font-size: 24px; font-weight: 900; color: black" onclick="CompositeGrid3()">Composite grid 3</button>
+                <button style=" font-size: 24px; font-weight: 900; color: black" onclick="CompositeGrid4()">Composite grid 4</button>
+            </center>
+        </article>
+        <article class="hidden content_cwr markdown-body">
+            <p style="font-size:40px; color:forestgreen">Sunny's <i style="font-size:40px; color:fuchsia">New </i>World of .NET<strong></strong></p>
+            <center style="font-size:40px; color:tomato"><h2>Common Web Runtime</h2></center>
+            <p style="font-size:32px; color:darkblue">Common Web Runtime(CWR) is the dynamic link library version of <strong><i style="font-size:32px; color:darkviolet">Google Chromium Project</i></strong></p>
+            <p>
+                <b style="font-size:20px; color:Highlight">
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspThe CWR contains all the code for the chromium project. Its goal is to make the windows desktop application implement the built-in modern browser model according to the consistent scheme,
+                    and make the host desktop software become the modern web browser naturally. Different from the traditional browser, the application integrated with CWR has its own application object model.
+                    Because all functions of browser are provided based on DLL mode, CWR does not know what the host application is and what object model the host application contains. CWR solves the connection problem between host model and browser standard model,
+                    the real browser model can only be determined after a specific host application is defined.
+                </b>
+            </p>
+            <p>
+                <b style="font-size:20px; color:blue">
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspThe DOM model of the host application will be a superset of the DOM model of the standard browser. In other words, the host application system will provide parts of the application model that cannot be provided in the standard browser.
+                    The actual DOM model of the host application may include members that are not part of the standard browser DOM model, which means that the host application supports both standard and application based web pages (there is no application based web page in standard browser mode).
+                    Because the host application has all the functions of chromium project built in, application developers can develop new application content for host application based on Web technology, and make host application become software ecosystem based on Web technology.
+                </b>
+            </p>
+            <p>
+                <b style="font-size:20px; color:black">
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspIn terms of DOM, CWR adds the support of. Net framework, which allows DOM elements for. Net UI to be written with DOM rules on Web pages.
+                    That is to say, WinForm, UserControl, WPF and other objects can be embodied in the actual development as part of page elements,
+                    which is very important for the formation of application ecology.
+                </b>
+            </p>
+            <content_cwr target="mainClient">
+                <cluster> 
+                    <xobj style="27">
+                        <xobj objid="nucleus" caption="Common WebBrowser Runtime"></xobj>
+                        <xobj caption="Page1"></xobj>
+                        <xobj caption="Page2"></xobj>
+                    </xobj>
+                </cluster> 
+            </content_cwr>
+            <center><img src="image/chrome.png" width="750" height="500" /></center>
+        </article>
+        <article class="hidden content_using_browser markdown-body">
+            <strong style="font-size:32px; color:navy">Using <i style="font-size:32px; color:fuchsia">Browser </i>Window</strong>
+            <h4><a href="#" onclick="OpenAppURL();" style="font-size:24px;color:forestgreen">Web App 1</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="#" onclick="OpenAppURL2();" style="font-size:24px;color:forestgreen">Web App 2</a></h4>
+            <hr />
+            <strong style="font-size:32px; color:navy">Using <i style="font-size:32px; color:fuchsia">Browser as Child Window </i>Object</strong>
+            <p>
+                <button onclick="BrowserFormApp1()"><b style="font-size:24px; color:darkgreen">Browser Form App 1</b></button>
+                <button onclick="BrowserFormApp2()"><b style="font-size:24px; color:darkgreen">Browser Form App 2</b></button>
+            </p>
+            <hr />
+            <strong style="font-size:32px; color:navy">Using <i style="font-size:32px; color:fuchsia">.NET UI </i>Object</strong>
+            <p>
+                <button onclick="OnCreate_Form1_SunnyForms2()"><b style="font-size:24px; color:darkgreen">Form App 1</b></button>
+                <button onclick="OnCreate_Form2_SunnyForms2()"><b style="font-size:24px; color:darkgreen">Form App 2</b></button>
+            </p>
+            <hr />
+            <content_using_browser target="mainClient">
+                <cluster> 
+                    <xobj style="43">
+                        <xobj objid="nucleus" caption="Using Browser Window"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                    </xobj>
+                </cluster> 
+            </content_using_browser>
+        </article>
+        <article class="hidden content_cer markdown-body">
+            <p style="font-size:40px; color:blue">Sunny's <i style="font-size:40px; color:fuchsia">New </i>World of .NET<strong></strong></p>
+            <center style="font-size:40px; color:blue"><h2>Common Eclipse Runtime</h2></center>
+            <p style="font-size:32px; color:crimson">The Common Eclipse Runtime(CER) is the dynamic link library version of the <strong><i style="font-size:32px; color:fuchsia">Eclipse </i>Project</strong></p>
+            <h3>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspIt contains all the code for the eclipse project. Its goal is to make the windows desktop application implement the built-in eclipse model according to the consistent scheme,
+                and make the host desktop software become the startup program of eclipse naturally.
+            </h3>
+            <h3>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspDifferent from the traditional eclipse, the application integrated with CER (Common Eclipse Runtime) has its own application object model.
+                Since all the functions of the eclipse part are provided based on the dll mode, CER does not know in advance whether the host application is What, what object model the host application contains,
+                CER solves the connection problem between the host model and the eclipse standard model, so the real eclipse model can only be determined after the host application is clear. At the same time,
+                the OSGi model of the host application will be larger than the standard eclipse OSGi model. In other words, the host application system will provide application model parts that are not provided in the standard eclipse.
+            </h3>
+            <h3>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspThe actual OSGi model of the host application may include members that are not part of the standard eclipse OSGi model,
+                which means that the host application supports both standard eclipse components and application-based eclipse components, and does not provide specific application-oriented components in the standard Eclipse mode eclipse components.
+                Because the host application has all the functions of the Eclipse project built-in, application developers can develop new application content for the host application based on Eclipse technology,
+                so that the host application becomes a software ecosystem based on Java technology.
+            </h3>
+            <content_cer target="mainClient">
+                <cluster> 
+                    <xobj objid="nucleus"></xobj>
+                </cluster> 
+            </content_cer>
+        </article>
+        <article class="hidden content_using_workbench markdown-body">
+            <p style="font-size:40px; color:crimson">Using <strong><i style="font-size:40px; color:fuchsia">WorkBench </i>Window</strong></p>
+            <center><img src="image/eclipse.png" width="900" height="450" /></center>
+            <content_using_workbench target="mainClient">
+                <cluster> 
+                    <xobj style="29">
+                        <xobj objid="nucleus" caption="Using Eclipse Workbench"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                    </xobj>
+                </cluster> 
+            </content_using_workbench>
+        </article>
+        <article class="hidden content_using_swt markdown-body">
+            <p style="font-size:40px; color:crimson">Using <strong><i style="font-size:40px; color:fuchsia">SWT </i>Form</strong></p>
+            <content_using_swt target="mainClient">
+                <cluster> 
+                    <xobj style="18">
+                        <xobj objid="nucleus" caption="Using java swt"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                    </xobj>
+                </cluster> 
+            </content_using_swt>
+        </article>
+
+        <article class="hidden content_using_winform markdown-body">
+            <p style="font-size:40px; color:darkgreen">Using <strong><i style="font-size:40px; color:fuchsia">WinForm </i>in Web Pages</strong></p>
+            <content_using_winform target="mainClient">
+                <cluster> 
+                    <xobj style="29">
+                        <xobj objid="nucleus" caption="Using Window Form"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                    </xobj>
+                </cluster> 
+            </content_using_winform>
+            <button style="font-size:32px; font-weight: 900; color:darkgreen" onclick="OnCreate_Form1_SunnyForms2()">Form App 1</button>
+            <button style="font-size:32px; font-weight: 900; color:darkgreen" onclick="OnCreate_Form2_SunnyForms2()">Form App 2</button>
+            <button style="font-size:32px; font-weight: 900; color:darkgreen" onclick="BrowserFormApp1()">Form App 3</button>
+            <button style="font-size:32px; font-weight: 900; color:darkgreen" onclick="BrowserFormApp2()">Form App 4</button>
+        </article>
+    </div>
+</body>
+</html>
