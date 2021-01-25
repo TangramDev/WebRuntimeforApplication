@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101220015           *
+ *           Web Runtime for Application - Version 1.0.0.202101240017           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -719,16 +719,11 @@ namespace Browser {
 		if (pInfo)
 		{
 			pBrowserWnd->m_pParentXobj = (CXobj*)pInfo->m_pXobj;
-			CosmosInfo* pInfo = (CosmosInfo*)::GetProp(hPPWnd, _T("CosmosInfo"));
-			if (pInfo)
+			HWND hPWnd = pBrowserWnd->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd;
+			hPWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(DocView, hPWnd);
+			if (hPWnd)
 			{
-				pBrowserWnd->m_pParentXobj = (CXobj*)pInfo->m_pXobj;
-				HWND hPWnd = pBrowserWnd->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd;
-				hPWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(DocView, hPWnd);
-				if (hPWnd)
-				{
-					m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hPWnd, _T("CosmosFrameWndInfo"));
-				}
+				m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hPWnd, _T("CosmosFrameWndInfo"));
 			}
 		}
 
@@ -999,8 +994,6 @@ namespace Browser {
 					m_pParentXobj = m_pGalaxy->m_pBindingXobj->m_pParentObj;
 					if (m_pParentXobj && m_pParentXobj->m_nViewType == TabGrid)
 					{
-						//IXobj* _pXobj = nullptr;
-						//m_pGalaxy->m_pBindingXobj->Observe(CComBSTR(strParam2), CComBSTR(strParam1), &_pXobj);
 						return;
 					}
 				}

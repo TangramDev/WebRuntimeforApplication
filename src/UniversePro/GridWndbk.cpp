@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101240017           *
+ *           Web Runtime for Application - Version 1.0.0.202101240017
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -13,23 +13,25 @@
  *    become a built-in programmable language in the application system, so that
  *    the application system can be expanded and developed for the Internet based
  *    on modern javscript/Web technology.
- * Use of this source code is governed by a BSD-style license that
- * can be found in the LICENSE file.
+// Use of this source code is governed by a BSD-style license that
+// can be found in the LICENSE file.
  *
  * CONTACT INFORMATION:
  * mailto:tangramteam@outlook.com or mailto:sunhuizlz@yeah.net
  * https://www.tangram.dev
+ *
  *******************************************************************************/
 
 // Xobj.cpp : implementation file
 
 #include "stdafx.h"
 #include "UniverseApp.h"
-#include "Cosmos.h"
 #include "Xobj.h"
 #include "Galaxy.h"
 #include "XobjHelper.h"
+#include "WPFView.h"
 #include "GridWnd.h"
+#include "TangramHtmlTreeWnd.h"
 #include "chromium/Browser.h"
 #include "chromium/WebPage.h"
 
@@ -255,6 +257,11 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 	{
 		return 0;
 	}
+	//if (lParam == 20200601)
+	//{
+	//	RecalcLayout();
+	//	return 0;
+	//}
 	if (lParam == 1993)
 	{
 		//fix bug for .net Control or Window Form
@@ -301,6 +308,7 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 	{
 		CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
 		pXobj->m_pXobjShareData->m_pGalaxy->m_bDesignerState = true;
+		((CXobj*)pXobj)->m_pXobjShareData->m_pOfficeObj = m_pXobj->m_pXobjShareData->m_pOfficeObj;
 		CXobjVector::iterator it;
 		it = find(m_pXobj->m_vChildNodes.begin(), m_pXobj->m_vChildNodes.end(), pOldNode);
 
@@ -308,6 +316,7 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 		{
 			pXobj->m_pRootObj = m_pXobj->m_pRootObj;
 			pXobj->m_pParentObj = m_pXobj;
+			m_pXobj->m_pXobjShareData->m_mapLayoutNodes[((CXobj*)pXobj)->m_strName] = (CXobj*)pXobj;
 			CXobjVector vec = pXobj->m_vChildNodes;
 			CXobj* pChildNode = nullptr;
 			for (auto it2 : pXobj->m_vChildNodes)
@@ -320,6 +329,28 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 			m_pXobj->m_vChildNodes.erase(it);
 			m_pXobj->m_vChildNodes.push_back(pXobj);
 			pOldNode->m_pHostWnd->DestroyWindow();
+			CString strXml = m_pXobj->m_pXobjShareData->m_pCosmosParse->xml();
+			g_pCosmos->m_pHostDesignUINode = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pWorkXobj;
+			if (g_pCosmos->m_pHostDesignUINode)
+			{
+				CTangramHtmlTreeWnd* pTreeCtrl = g_pCosmos->m_pDocDOMTree;
+				pTreeCtrl->DeleteItem(g_pCosmos->m_pDocDOMTree->m_hFirstRoot);
+
+				if (pTreeCtrl->m_pHostXmlParse)
+				{
+					delete pTreeCtrl->m_pHostXmlParse;
+				}
+				g_pCosmos->InitDesignerTreeCtrl(strXml);
+				g_pCosmos->m_pHostDesignUINode->m_pDocXmlParseNode = pTreeCtrl->m_pHostXmlParse;
+			}
+#ifndef _WIN64
+			if (g_pCosmos->m_strExeName == _T("devenv"))
+			{
+				//VisualStudioPlus::CVSAddin* pAddin = (VisualStudioPlus::CVSAddin*)g_pCosmos;
+				//if (pAddin->m_pOutputWindowPane)
+				//	pAddin->m_pOutputWindowPane->OutputString(strXml.AllocSysString());
+			}
+#endif
 			g_pCosmos->m_pDesignXobj = nullptr;
 			RecalcLayout();
 		}
@@ -329,9 +360,9 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 
 LRESULT CGridWnd::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
 {
-	//RecalcLayout();
-	//m_pXobj->m_pXobjShareData->m_pGalaxy->HostPosChanged();
-	//::InvalidateRect(::GetParent(m_hWnd), nullptr, true);
+	RecalcLayout();
+	m_pXobj->m_pXobjShareData->m_pGalaxy->HostPosChanged();
+	::InvalidateRect(::GetParent(m_hWnd), nullptr, true);
 	return -1;
 }
 
@@ -347,6 +378,12 @@ LRESULT CGridWnd::OnSplitterCreated(WPARAM wParam, LPARAM lParam)
 
 LRESULT CGridWnd::OnActivePage(WPARAM wParam, LPARAM lParam)
 {
+	if (g_pCosmos->m_pDocDOMTree && g_pCosmos->m_pCLRProxy)
+	{
+		CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
+		if (pGalaxy->m_bDesignerState)
+			g_pCosmos->m_pCLRProxy->SelectXobj(m_pXobj);
+	}
 	return CWnd::DefWindowProc(WM_TABCHANGE, wParam, lParam);;
 }
 
@@ -431,8 +468,16 @@ void CGridWnd::StopTracking(BOOL bAccept)
 
 	if (bAccept)
 	{
+		pGalaxy->UpdateVisualWPFMap(::GetParent(m_hWnd), false);
 		::InvalidateRect(pGalaxy->m_hWnd, nullptr, true);
-
+		if (pGalaxy->m_bDesignerState && g_pCosmos->m_pDesignXobj)
+		{
+			g_pCosmos->UpdateXobj(g_pCosmos->m_pDesignXobj->m_pRootObj);
+			CComBSTR bstrXml(L"");
+			g_pCosmos->m_pDesignXobj->m_pRootObj->get_DocXml(&bstrXml);
+			g_pCosmos->put_AppKeyValue(CComBSTR(L"TangramDesignerXml"), CComVariant(bstrXml));
+		}
+		
 		CWebPage* pWebWnd = nullptr;
 		if (pGalaxy->m_pWebPageWnd)
 		{
@@ -450,11 +495,12 @@ void CGridWnd::StopTracking(BOOL bAccept)
 				CXobj* pRetNode = (CXobj*)lRes;
 				if (pRetNode && pRetNode->m_nViewType == Grid)
 				{
-					pRetNode->m_pXobjShareData->m_pGalaxy->HostPosChanged();
+					CGalaxy* pGalaxy = pRetNode->m_pXobjShareData->m_pGalaxy;
+					pGalaxy->HostPosChanged();
 				}
 			}
 		}
-		RecalcLayout();
+		this->RecalcLayout();
 		if (pWebWnd)
 		{
 			::SendMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
@@ -668,6 +714,7 @@ void CGridWnd::RecalcLayout()
 	if (m_bCreated == false || GetDlgItem(IdFromRowCol(0, 0)) == NULL)
 		return;
 	_RecalcLayout();
+	m_pXobj->m_pXobjShareData->m_pGalaxy->UpdateVisualWPFMap(m_hWnd, false);
 }
 
 void CGridWnd::_RecalcLayout()
@@ -728,7 +775,7 @@ void CGridWnd::_RecalcLayout()
 
 	// invalidate all the splitter bars (with NULL pDC)
 	DrawAllSplitBars(NULL, rectInside.right, rectInside.bottom);
-	//::InvalidateRect(m_hWnd, nullptr, false);
+	::InvalidateRect(m_hWnd, nullptr, false);
 }
 
 BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
@@ -738,6 +785,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 	m_pXobj->m_nViewType = Grid;
 	m_pXobj->m_nID = nID;
 	m_pXobj->m_pDisp = nullptr;
+	m_pXobj->m_pXobjShareData->m_mapLayoutNodes[m_pXobj->m_strName] = m_pXobj;
 
 	int r, g, b;
 	CComBSTR bstrVal(L"");
@@ -903,6 +951,8 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 			}
 		}
 		SetWindowPos(NULL, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, SWP_NOZORDER | SWP_NOREDRAW);
+		if (m_pXobj->m_pXobjShareData->m_pGalaxyCluster)
+			m_pXobj->m_pXobjShareData->m_pGalaxyCluster->Fire_NodeCreated(m_pXobj);
 
 		SetWindowText(m_pXobj->m_strNodeName);
 		m_bCreated = true;
@@ -1141,6 +1191,17 @@ int CGridWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 
 	CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
 
+	if (g_pCosmos->m_pDocDOMTree)
+	{
+		if (g_pCosmos->m_hVSToolBoxWnd)
+		{
+			if (::IsChild(g_pCosmos->m_hVSToolBoxWnd, m_hWnd) == false)
+				g_pCosmos->m_pCLRProxy->SelectXobj(m_pXobj);
+		}
+		else if (g_pCosmos->m_pCLRProxy && ::IsChild(g_pCosmos->m_hHostWnd, m_hWnd) == false)
+			g_pCosmos->m_pCLRProxy->SelectXobj(m_pXobj);
+	}
+
 	if (pGalaxy->m_pGalaxyCluster->m_pUniverseAppProxy)
 	{
 		HWND hMenuWnd = pGalaxy->m_pGalaxyCluster->m_pUniverseAppProxy->GetActivePopupMenu(nullptr);
@@ -1261,6 +1322,12 @@ void CGridWnd::OnSize(UINT nType, int cx, int cy)
 void CGridWnd::OnDestroy()
 {
 	m_pXobj->Fire_Destroy();
+	HANDLE hData = RemoveProp(m_hWnd, _T("CosmosInfo"));
+	if (hData)
+	{
+		CosmosInfo* pInfo = (CosmosInfo*)hData;
+		delete pInfo;
+	}
 	__super::OnDestroy();
 }
 

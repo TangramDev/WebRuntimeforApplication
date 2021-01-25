@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101220015
+ *           Web Runtime for Application - Version 1.0.0.202101240017
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -42,6 +42,8 @@ public:
 	int m_Vmin,m_Vmax,m_Hmin,m_Hmax;
 	int m_nMasterRow;
 	int m_nMasterCol;
+	int m_nLastWidth = 0;
+	int m_nLastHeight = 0;
 	COLORREF		rgbLeftTop;
 	COLORREF		rgbMiddle;
 	COLORREF		rgbRightBottom;
