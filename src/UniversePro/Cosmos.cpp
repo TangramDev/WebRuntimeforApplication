@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101240017           *
+ *           Web Runtime for Application - Version 1.0.0.202101250018           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1664,7 +1664,6 @@ IGalaxy* CCosmos::ConnectGalaxyCluster(HWND hGalaxy, CString _strGalaxyName, IGa
 		return nullptr;
 	CString strGalaxyName = _strGalaxyName;
 
-	CCosmosDocTemplate* pDocTemplate = nullptr;
 	IGalaxy* pGalaxy = nullptr;
 	pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((__int64)hGalaxy), strGalaxyName.AllocSysString(), &pGalaxy);
 	if (pGalaxy)
@@ -1675,30 +1674,19 @@ IGalaxy* CCosmos::ConnectGalaxyCluster(HWND hGalaxy, CString _strGalaxyName, IGa
 		CComQIPtr<IXobj> pParentNode(pInfo->m_pParentDisp);
 		IXobj* pXobj = nullptr;
 		CString str = _T("");
-		if (pDocTemplate == nullptr)
-		{
-			m_mapGalaxy2GalaxyCluster[hGalaxy] = pGalaxyCluster;
-		}
-		else
-		{
-			HWND hWnd = _pGalaxy->m_pGalaxyCluster->m_hWnd;
-			_pGalaxy->m_pCosmosDocTemplate = pDocTemplate;
-		}
+		m_mapGalaxy2GalaxyCluster[hGalaxy] = pGalaxyCluster;
 		CString strKey = _T("default");
 		str.Format(_T("<%s><cluster><xobj name='%s' /></cluster></%s>"), strKey, _strGalaxyName, strKey);
 		pGalaxy->Observe(CComBSTR(strKey), CComBSTR(str), &pXobj);
-		if (pDocTemplate == nullptr && pXobj)
+		CXobj* _pXobj = (CXobj*)pXobj;
+		HWND hWnd = _pXobj->m_pXobjShareData->m_pGalaxyCluster->m_hWnd;
+		CWinForm* pWnd = (CWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
+		if (pWnd)
 		{
-			CXobj* _pXobj = (CXobj*)pXobj;
-			HWND hWnd = _pXobj->m_pXobjShareData->m_pGalaxyCluster->m_hWnd;
-			CWinForm* pWnd = (CWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
-			if (pWnd)
-			{
-				if ((::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD) || (pWnd->m_bMdiForm && pWnd->m_strChildFormPath != _T("")))
-					return pGalaxy;
-			}
-			pXobj->put_SaveToConfigFile(true);
+			if ((::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD) || (pWnd->m_bMdiForm && pWnd->m_strChildFormPath != _T("")))
+				return pGalaxy;
 		}
+		pXobj->put_SaveToConfigFile(true);
 	}
 
 	return pGalaxy;
@@ -4308,15 +4296,6 @@ STDMETHODIMP CCosmos::GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG h
 		}
 	}
 	return S_FALSE;
-}
-
-STDMETHODIMP CCosmos::GetDocTemplateXml(BSTR bstrCaption, BSTR bstrPath, BSTR bstrFilter, BSTR* bstrTemplatePath)
-{
-	CString strTemplate = GetDocTemplateXml(OLE2T(bstrCaption), OLE2T(bstrPath), OLE2T(bstrFilter));
-	if (strTemplate == _T(""))
-		return S_FALSE;
-	*bstrTemplatePath = strTemplate.AllocSysString();
-	return S_OK;
 }
 
 STDMETHODIMP CCosmos::CreateCosmosEventObj(ICosmosEventObj** ppCosmosEventObj)

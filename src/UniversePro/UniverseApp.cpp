@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101240017           *
+ *           Web Runtime for Application - Version 1.0.0.202101250018           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1116,20 +1116,14 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 				g_pCosmos->m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Xobj Class"), g_pCosmos->m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theApp.m_hInstance, NULL);
 				g_pCosmos->m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, 0, theApp.m_hInstance, NULL);
 			}
-			//if (::SendMessage(hPWnd, WM_QUERYAPPPROXY, (WPARAM)pCreateWnd->lpcs->lpCreateParams, TANGRAM_CONST_PANE_FIRST) == 1992)
+			if (g_pCosmos->m_pMDIMainWnd == nullptr)
 			{
-				if (g_pCosmos->m_pMDIMainWnd == nullptr)
-				{
-					g_pCosmos->m_pMDIMainWnd = new CUniverseMDIMain();
-					g_pCosmos->m_pMDIMainWnd->m_hMDIClient = hWnd;
-					g_pCosmos->m_pMDIMainWnd->SubclassWindow(hPWnd);
-					//if (g_pCosmos->m_pCosmosDelegate)
-					//	g_pCosmos->m_pCosmosDelegate->HookAppDocTemplateInfo();
-				}
+				g_pCosmos->m_pMDIMainWnd = new CMDIMainWindow();
+				g_pCosmos->m_pMDIMainWnd->m_hMDIClient = hWnd;
+				g_pCosmos->m_pMDIMainWnd->SubclassWindow(hPWnd);
 			}
 			if (g_pCosmos->m_pCosmosDelegate)
 				g_pCosmos->m_pCosmosDelegate->AppWindowCreated(_T("MDIClient"), hPWnd, hWnd);
-			::PostMessage(g_pCosmos->m_hCosmosWnd, WM_MDICLIENTCREATED, (WPARAM)hWnd, (LPARAM)hPWnd);
 		}
 		else if (strClassName.Find(_T("Afx:ControlBar:")) == 0)
 		{
@@ -1899,12 +1893,12 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 							pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
 							if (pCosmosFrameWndInfo->m_nFrameType == 1)
 							{
-								auto it = g_pCosmos->m_mapMDTFrameHelperWnd.find(hWnd);
-								if (it == g_pCosmos->m_mapMDTFrameHelperWnd.end())
+								auto it = g_pCosmos->m_mapMDTWindow.find(hWnd);
+								if (it == g_pCosmos->m_mapMDTWindow.end())
 								{
-									CMDTFrameHelperWnd* pFrameWnd = new CMDTFrameHelperWnd();
+									CMDTWindow* pFrameWnd = new CMDTWindow();
 									pFrameWnd->SubclassWindow(hWnd);
-									g_pCosmos->m_mapMDTFrameHelperWnd[hWnd] = pFrameWnd;
+									g_pCosmos->m_mapMDTWindow[hWnd] = pFrameWnd;
 								}
 							}
 						}
@@ -1977,10 +1971,10 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 									}
 									if (bMdiChild)
 									{
-										CMDIChildHelperWnd* pWnd = (CMDIChildHelperWnd*)::SendMessage(hWnd, WM_COSMOSMSG, 0, 19631222);
+										CMDIChildWindow* pWnd = (CMDIChildWindow*)::SendMessage(hWnd, WM_COSMOSMSG, 0, 19631222);
 										if (pWnd == nullptr)
 										{
-											pWnd = new CMDIChildHelperWnd();
+											pWnd = new CMDIChildWindow();
 											pWnd->SubclassWindow(hWnd);
 											g_pCosmos->m_pMDIMainWnd->m_mapMDIChildHelperWnd[hWnd] = pWnd;
 										}
@@ -2083,6 +2077,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 																	if (pGalaxy)
 																	{
 																		CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
+																		pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys[strName] = _pGalaxy;
 																		_pGalaxy->m_pWebPageWnd = g_pCosmos->m_pHostHtmlWnd;
 																		IXobj* pXobj = nullptr;
 																		_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(strXml), &pXobj);

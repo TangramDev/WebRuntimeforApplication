@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101240017
+ *           Web Runtime for Application - Version 1.0.0.202101250018
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -246,12 +246,6 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 	case WM_COSMOSMSG:
 		switch (lParam)
 		{
-		case TANGRAM_CHROME_APP_INIT:
-		{
-			if (g_pCosmos->m_hMainWnd == NULL && g_pCosmos->m_pUniverseAppProxy)
-				g_pCosmos->m_hMainWnd = g_pCosmos->m_pUniverseAppProxy->InitCosmosApp();
-		}
-		break;
 		case 20200120:
 		{
 			HWND h = (HWND)wParam;

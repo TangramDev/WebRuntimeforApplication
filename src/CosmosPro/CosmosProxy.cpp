@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101240017
+ *           Web Runtime for Application - Version 1.0.0.202101250018
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -2287,10 +2287,6 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHost
 		Control^ pObj = static_cast<Control^>(_pObj);
 		if (pObj != nullptr && pHostNode)
 		{
-			__int64 h = 0;
-			pHostNode->get_Handle(&h);
-			if (h)
-				::SendMessage((HWND)h, WM_COSMOSMSG, 0, 19920612);
 			IXobj* pRootXobj = NULL;
 			pHostNode->get_RootXobj(&pRootXobj);
 			CComBSTR bstrName(L"");
